@@ -1,0 +1,15 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+.container{
+	width: 100vw !important;
+	height: 100vh;
+}
+.containerDark{
+	background-color: #212121;
+	color: white;
+}
+
+/*# sourceMappingURL=style.css.map */
