@@ -3,13 +3,63 @@
 	padding: 0;
 	box-sizing: border-box;
 }
-.container{
-	width: 100vw !important;
-	height: 100vh;
-}
-.containerDark{
+
+.darkBody{
 	background-color: #212121;
 	color: white;
 }
+
+.themeWrapper{
+	display: flex;
+	justify-content: end;
+	margin-top: 1rem;
+}
+
+.todoCreatorWrapper{
+border: 0.1rem solid #0063F4;
+border-radius: 2rem;
+padding: 3rem;
+}
+
+.todoWrapper{
+	display: grid;
+	grid-template-areas: 
+	'check number name closeBtn '
+	'check . text closeBtn';
+	grid-template-columns: 0fr 0fr 1fr;
+	border: 0.1rem solid #0063F4;
+	border-radius: 2rem;
+	padding: 1rem;
+}
+
+.checkBoxWrapper{
+	grid-area: check;
+		grid-row: 1/ span 2;
+}
+
+.todoNumber{
+	grid-area: number;
+	
+}
+.todoName{
+	margin-left: 0.5rem;
+	grid-area: name;
+align-self: start;
+}
+.todoDescription{
+	margin-left: 0.5rem;
+	grid-area: text;
+}
+
+.btnWrapper{
+	grid-area: closeBtn;
+	grid-row: 1/ span 2;
+	display: flex;
+}
+
+.closeBtn{
+	align-self: center;
+}
+
 
 /*# sourceMappingURL=style.css.map */
