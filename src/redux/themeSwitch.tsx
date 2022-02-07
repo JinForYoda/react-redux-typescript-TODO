@@ -5,7 +5,7 @@ interface ThemeState {
 }
 
 const initialState: ThemeState = {
-	isDark: false,
+	isDark: false
 }
 
 export const themeSwitch = createSlice({
@@ -13,9 +13,7 @@ export const themeSwitch = createSlice({
 	initialState,
 	reducers: {
 		switchTheme: (state) => {
-			state.isDark
-				? state.isDark = false
-				: state.isDark = true
+			state.isDark = !state.isDark
 		},
 	},
 })

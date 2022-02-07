@@ -1,32 +1,37 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { addTodo, switchDescription } from '../redux/todoCreator';
+import { useAppDispatch } from '../hooks';
+import { addTodo } from '../redux/todoCreator';
 import uniqid from 'uniqid';
 import { useNavigate } from 'react-router-dom';
 
 export default function TodoCreator() {
-	const descriptionOn = useAppSelector(state => state.todoCreator.descriptionOn)
-	const todoList = useAppSelector(state => state.todoCreator.todoList)
 	const dispatch = useAppDispatch()
+
+	const [descriptionOn, setDescriptionOn] = useState(false)
 	const [todoName, setTodoName] = useState('')
 	const [todoDescription, setTodoDescription] = useState('')
+
 	const navigate = useNavigate()
 
 	const addTodoToList = (e: React.SyntheticEvent) => {
 		e.preventDefault()
+
 		dispatch(addTodo({
-			todoName: todoName,
-			todoDescription: todoDescription,
+			todoName,
+			todoDescription,
 			id: uniqid(),
-			complete: false
+			complete: false,
+			isAsync: false
 		}))
+
 		setTodoName('')
 		setTodoDescription('')
-		descriptionOn && dispatch(switchDescription())
-		navigate('/active')
 
+		descriptionOn && setDescriptionOn(!descriptionOn)
+
+		navigate('/active')
 	}
 
 	const changeState = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -43,7 +48,7 @@ export default function TodoCreator() {
 				</Form.Text>
 			</Form.Group>
 			<Form.Group className="mb-3" controlId="formBasicCheckbox">
-				<Form.Check type="checkbox" checked={descriptionOn} onChange={() => dispatch(switchDescription())} label="Use description" />
+				<Form.Check type="checkbox" checked={descriptionOn} onChange={() => setDescriptionOn(!descriptionOn)} label="Use description" />
 			</Form.Group>
 			{
 				descriptionOn &&
