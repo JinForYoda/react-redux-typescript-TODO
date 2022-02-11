@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Nav from 'react-bootstrap/Nav'
-import { Link, Routes, Route, useLocation } from 'react-router-dom';
+import { Link, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useAppSelector } from '../hooks';
 import ActiveTodo from './ActiveTodo';
 import AsyncTodo from './AsyncTodo';
@@ -59,7 +59,8 @@ export default function TodoList() {
 				<Route path='/complete' element={<CompleteTodo />} />
 				<Route path='/async' element={<AsyncTodo />} />
 				<Route path='*' element={<ActiveTodo />} />
-
+				<Route path="/" element={<Navigate to="/active" />}
+				/>
 			</Routes>
 		</>
 

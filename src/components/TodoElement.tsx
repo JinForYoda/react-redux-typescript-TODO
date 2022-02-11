@@ -3,14 +3,14 @@ import { useAppDispatch } from '../hooks';
 import CloseButton from 'react-bootstrap/CloseButton'
 import { deleteTodo, switchTodoCompleteStatus } from '../redux/todoCreator';
 import Form from 'react-bootstrap/Form'
-
-export default function TodoElement({ todo, idx }) {
+import { TodoList } from '../redux/todoCreator';
+export default function TodoElement({ todo, idx }: { todo: TodoList, idx: number }) {
 	const dispatch = useAppDispatch()
 
-	const deleteThisTodo = (e) => {
+	const deleteThisTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
 		dispatch(deleteTodo(todo.id))
 	}
-	const switchCompleteStatus = (e) => {
+	const switchCompleteStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch(switchTodoCompleteStatus(todo.id))
 	}
 

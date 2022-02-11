@@ -5,7 +5,7 @@ interface TodoCreator {
 	isFetching: boolean
 }
 
-interface TodoList {
+export interface TodoList {
 	todoName: string,
 	todoDescription: string,
 	id: string,
