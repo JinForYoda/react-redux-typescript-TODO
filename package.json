@@ -1,7 +1,7 @@
 {
 	"name": "react_redux_typescript-todo",
 	"version": "0.1.0",
-	"homepage": "https://jinforyoda.github.io/todo",
+	"homepage": "https://jinforyoda.github.io/react-redux-typescript-TODO",
 	"private": true,
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.7.1",

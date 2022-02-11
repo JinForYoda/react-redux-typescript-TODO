@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
 	<Provider store={store}>
-		<BrowserRouter basename='/todo'>
+		<BrowserRouter basename='/react-redux-typescript-TODO'>
 			<App />
 		</BrowserRouter>
 	</Provider>,
