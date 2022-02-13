@@ -1,66 +1,93 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { useAppDispatch } from '../hooks';
-import { addTodo } from '../redux/todoCreator';
 import uniqid from 'uniqid';
-import { useNavigate } from 'react-router-dom';
 
-export default function TodoCreator() {
-	const dispatch = useAppDispatch()
+interface ITodoList {
+	todoName: string,
+	todoDescription: string,
+	id: string,
+	complete: boolean,
+	isAsync: boolean
+}
 
-	const [descriptionOn, setDescriptionOn] = useState(false)
-	const [todoName, setTodoName] = useState('')
-	const [todoDescription, setTodoDescription] = useState('')
+interface MyProps {
+	addTodo: (arg0: ITodoList) => void,
+	location?: any,
+	navigate?: any
+}
 
-	const navigate = useNavigate()
+interface MyState {
+	descriptionOn: boolean,
+	todoName: string,
+	todoDescription: string
+}
 
-	const addTodoToList = (e: React.SyntheticEvent) => {
+export default class TodoCreator extends Component<MyProps, MyState> {
+	state = {
+		descriptionOn: false,
+		todoName: '',
+		todoDescription: ''
+	}
+	addTodoToList = (e: React.SyntheticEvent) => {
 		e.preventDefault()
-
-		dispatch(addTodo({
-			todoName,
-			todoDescription,
+		this.props.addTodo({
+			todoName: this.state.todoName,
+			todoDescription: this.state.todoDescription,
 			id: uniqid(),
 			complete: false,
 			isAsync: false
-		}))
-
-		setTodoName('')
-		setTodoDescription('')
-
-		descriptionOn && setDescriptionOn(!descriptionOn)
-
-		navigate('/active')
+		})
+		this.setState({
+			descriptionOn: false,
+			todoName: '',
+			todoDescription: ''
+		})
+		this.props.navigate('/active')
 	}
 
-	const changeState = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
-		setState(e.target.value)
+	changeTodoName(e: React.ChangeEvent<HTMLInputElement>) {
+		this.setState({
+			todoName: e.target.value
+		})
+	}
+	changeTodoDescription(e: React.ChangeEvent<HTMLInputElement>) {
+		this.setState({
+			todoDescription: e.target.value
+		})
 	}
 
-	return (
-		<Form onSubmit={addTodoToList} className='todoCreatorWrapper'>
-			<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-				<Form.Label><h5>TODO Name</h5></Form.Label>
-				<Form.Control onChange={(e) => changeState(e as any, setTodoName)} value={todoName} type="text" placeholder="Place for your TODO" />
-				<Form.Text className="text-muted">
-					Put here any name you want to.
-				</Form.Text>
-			</Form.Group>
-			<Form.Group className="mb-3" controlId="formBasicCheckbox">
-				<Form.Check type="checkbox" checked={descriptionOn} onChange={() => setDescriptionOn(!descriptionOn)} label="Use description" />
-			</Form.Group>
-			{
-				descriptionOn &&
-				<Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-					<Form.Label><h6>Description area</h6></Form.Label>
-					<Form.Control onChange={(e) => changeState(e as any, setTodoDescription)} value={todoDescription} as="textarea" rows={1} />
+	switchDescriptionOn(e: React.ChangeEvent<HTMLInputElement>) {
+		this.setState({
+			descriptionOn: !this.state.descriptionOn,
+			todoDescription: ''
+		})
+	}
+	render() {
+		return (
+			<Form onSubmit={(e) => this.addTodoToList(e)} className='todoCreatorWrapper'>
+				<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+					<Form.Label><h5>TODO Name</h5></Form.Label>
+					<Form.Control onChange={(e) => this.changeTodoName(e as any)} value={this.state.todoName} type="text" placeholder="Place for your TODO" />
+					<Form.Text className="text-muted">
+						Put here any name you want to.
+					</Form.Text>
 				</Form.Group>
-			}
-
-			<Button variant="primary" type="submit">
-				Create
-			</Button>
-		</Form>
-	)
+				<Form.Group className="mb-3" controlId="formBasicCheckbox">
+					<Form.Check type="checkbox" checked={this.state.descriptionOn} onChange={(e) => this.switchDescriptionOn(e)} label="Use description" />
+				</Form.Group>
+				{
+					this.state.descriptionOn &&
+					<Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+						<Form.Label><h6>Description area</h6></Form.Label>
+						<Form.Control onChange={(e) => this.changeTodoDescription(e as any)} value={this.state.todoDescription} as="textarea" rows={1} />
+					</Form.Group>
+				}
+				<Button variant="primary" type="submit">
+					Create
+				</Button>
+			</Form>
+		)
+	}
 }
+

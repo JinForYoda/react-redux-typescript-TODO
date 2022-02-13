@@ -68,10 +68,9 @@ align-self: start;
 	border-radius: 10px;
 }
 
-.lineBlack{
-	background-color:white ;
+body.darkBody .lineWhite{
+	background-color: white;
 }
 
 
 
-/*# sourceMappingURL=style.css.map */

@@ -1,28 +1,37 @@
-import React from 'react';
-import { useAppDispatch } from '../hooks';
+import React, { Component } from 'react';
 import CloseButton from 'react-bootstrap/CloseButton'
-import { deleteTodo, switchTodoCompleteStatus } from '../redux/todoCreator';
 import Form from 'react-bootstrap/Form'
-import { TodoList } from '../redux/todoCreator';
-export default function TodoElement({ todo, idx }: { todo: TodoList, idx: number }) {
-	const dispatch = useAppDispatch()
 
-	const deleteThisTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
-		dispatch(deleteTodo(todo.id))
-	}
-	const switchCompleteStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
-		dispatch(switchTodoCompleteStatus(todo.id))
-	}
+interface ITodoList {
+	todoName: string,
+	todoDescription: string,
+	id: string,
+	complete: boolean,
+}
 
-	return (
-		<div className="todoWrapper">
-			<Form className="checkBoxWrapper">
-				<Form.Check onChange={switchCompleteStatus} checked={todo.complete} type="checkbox" label="" />
-			</Form>
-			<h5 className='todoNumber'>{idx}. </h5>
-			<h5 className='todoName'>{todo.todoName}</h5>
-			<h6 className='todoDescription text-muted'>{todo.isAsync === true ? 'async' : todo.todoDescription}</h6>
-			<div className="btnWrapper"><CloseButton onClick={deleteThisTodo} className='closeBtn' /></div>
-		</div >
-	)
+interface MyProps {
+	todo: ITodoList,
+	idx: number,
+	todoMethods: any
+}
+
+interface MyState {
+
+}
+
+
+export default class TodoElement extends Component<MyProps, MyState> {
+	render() {
+		return (
+			<div className="todoWrapper">
+				<Form className="checkBoxWrapper">
+					<Form.Check onChange={(e) => this.props.todoMethods.switchCompleteStatus(e, this.props.todo.id)} checked={this.props.todo.complete} type="checkbox" label="" />
+				</Form>
+				<h5 className='todoNumber'>{this.props.idx}. </h5>
+				<h5 className='todoName'>{this.props.todo.todoName}</h5>
+				<h6 className='todoDescription text-muted'>{this.props.todo.todoDescription}</h6>
+				<div className="btnWrapper"><CloseButton onClick={(e) => this.props.todoMethods.deleteThisTodo(e, this.props.todo.id)} className='closeBtn' /></div>
+			</div >
+		)
+	}
 }

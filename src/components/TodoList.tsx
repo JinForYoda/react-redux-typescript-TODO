@@ -1,68 +1,122 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { Component } from 'react';
 import Nav from 'react-bootstrap/Nav'
-import { Link, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { useAppSelector } from '../hooks';
+import { Link, Routes, Route, Navigate } from 'react-router-dom';
 import ActiveTodo from './ActiveTodo';
 import AsyncTodo from './AsyncTodo';
 import CompleteTodo from './CompleteTodo';
 
+interface ITodoList {
+	todoName: string,
+	todoDescription: string,
+	id: string,
+	complete: boolean,
+	isAsync: boolean
+}
 
-export default function TodoList() {
-	const todoList = useAppSelector(state => state.todoCreator.todoList)
-	const activeTodoList = todoList.filter(todo => todo.complete === false && todo.isAsync === false)
-	const asyncTodoList = todoList.filter(todo => todo.complete === false && todo.isAsync === true)
-	const completeTodoList = todoList.filter(todo => todo.complete === true)
+interface MyProps {
+	todoList: ITodoList[],
+	todoMethods: any
+	location?: any,
+	navigate?: any
+}
 
-	const [activeNav, setActiveNav] = useState(false)
-	const [completeNav, setCompleteNav] = useState(false)
-	const [asyncNav, setAsyncNav] = useState(false)
-	//commit
-	const location = useLocation()
+interface MyState {
+	activeNav: boolean,
+	completeNav: boolean,
+	asyncNav: boolean
+}
 
-	useEffect(() => {
-		switch (location.pathname) {
+export default class TodoList extends Component<MyProps, MyState> {
+	state = {
+		activeNav: false,
+		completeNav: false,
+		asyncNav: false
+	}
+
+	componentDidMount() {
+		switch (this.props.location.pathname) {
 			case '/active':
-				setActiveNav(true)
-				setCompleteNav(false)
-				setAsyncNav(false)
+				this.setState({
+					activeNav: true,
+					completeNav: false,
+					asyncNav: false
+				})
 				break
 			case '/complete':
-				setActiveNav(false)
-				setCompleteNav(true)
-				setAsyncNav(false)
+				this.setState({
+					activeNav: false,
+					completeNav: true,
+					asyncNav: false
+				})
 				break
 			case '/async':
-				setActiveNav(false)
-				setCompleteNav(false)
-				setAsyncNav(true)
+				this.setState({
+					activeNav: false,
+					completeNav: false,
+					asyncNav: true
+				})
 				break
-
 		}
-	}, [location])
+	}
 
-	return (
-		<>
-			<Nav variant="tabs" defaultActiveKey="/home">
-				<Nav.Item>
-					<Nav.Link active={activeNav} eventKey="link-1" as={Link} to='/active'>Active {activeTodoList.length ? `(${activeTodoList.length})` : null}</Nav.Link>
-				</Nav.Item>
-				<Nav.Item>
-					<Nav.Link active={completeNav} eventKey="link-2" as={Link} to='/complete'>Complete {completeTodoList.length ? `(${completeTodoList.length})` : null}</Nav.Link>
-				</Nav.Item>
-				<Nav.Item>
-					<Nav.Link active={asyncNav} eventKey="link-3" as={Link} to='/async'>Async {asyncTodoList.length ? `(${asyncTodoList.length})` : null}</Nav.Link>
-				</Nav.Item>
-			</Nav>
-			<Routes>
-				<Route path='/active' element={<ActiveTodo />} />
-				<Route path='/complete' element={<CompleteTodo />} />
-				<Route path='/async' element={<AsyncTodo />} />
-				<Route path='*' element={<ActiveTodo />} />
-				<Route path="/" element={<Navigate to="/active" />}
-				/>
-			</Routes>
-		</>
+	componentDidUpdate(prevProps: MyProps, prevState: MyState) {
+		if (prevProps.location !== this.props.location) {
+			switch (this.props.location.pathname) {
+				case '/active':
+					this.setState({
+						activeNav: true,
+						completeNav: false,
+						asyncNav: false
+					})
+					break
+				case '/complete':
+					this.setState({
+						activeNav: false,
+						completeNav: true,
+						asyncNav: false
+					})
+					break
+				case '/async':
+					this.setState({
+						activeNav: false,
+						completeNav: false,
+						asyncNav: true
+					})
+					break
+			}
+		}
 
-	)
+	}
+
+	render() {
+		const todoList = this.props.todoList
+		const activeTodoList = todoList.filter(todo => todo.complete === false && todo.isAsync === false)
+		const asyncTodoList = todoList.filter(todo => todo.complete === false && todo.isAsync === true)
+		const completeTodoList = todoList.filter(todo => todo.complete === true)
+
+		return (
+			<>
+				<Nav variant="tabs" defaultActiveKey="/home">
+					<Nav.Item>
+						<Nav.Link active={this.state.activeNav} eventKey="link-1" as={Link} to='/active'>Active {activeTodoList.length ? `(${activeTodoList.length})` : null}</Nav.Link>
+					</Nav.Item>
+					<Nav.Item>
+						<Nav.Link active={this.state.completeNav} eventKey="link-2" as={Link} to='/complete'>Complete {completeTodoList.length ? `(${completeTodoList.length})` : null}</Nav.Link>
+					</Nav.Item>
+					<Nav.Item>
+						<Nav.Link active={this.state.asyncNav} eventKey="link-3" as={Link} to='/async'>Async {asyncTodoList.length ? `(${asyncTodoList.length})` : null}</Nav.Link>
+					</Nav.Item>
+				</Nav>
+				<Routes>
+					<Route path='/active' element={<ActiveTodo todoList={todoList} todoMethods={this.props.todoMethods} />} />
+					<Route path='/complete' element={<CompleteTodo todoList={todoList} todoMethods={this.props.todoMethods} />} />
+					<Route path='/async' element={<AsyncTodo todoList={todoList} todoMethods={this.props.todoMethods} />} />
+					<Route path='*' element={<Navigate to="/active" />} />
+					<Route path="/" element={<Navigate to="/active" />}
+					/>
+				</Routes>
+			</>
+		)
+	}
 }
+
