@@ -1,5 +1,7 @@
 import React from 'react';
+import { useAppSelector } from '../../hooks';
 import './loader.css'
 export default function Loader() {
-	return < div className='d-flex justify-content-center'><div className="lds-ripple"><div></div><div></div></div></div>
+	const isDark = useAppSelector(state => state.theme.isDark)
+	return < div className='d-flex justify-content-center'><div className={isDark ? "lds-ripple" : "lds-ripple lds-rippleWhite"}><div></div><div></div></div></div>
 }

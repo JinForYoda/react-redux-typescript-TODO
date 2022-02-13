@@ -34,6 +34,8 @@ export default function TodoCreator() {
 		navigate('/active')
 	}
 
+
+
 	const changeState = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
 		setState(e.target.value)
 	}
@@ -48,7 +50,7 @@ export default function TodoCreator() {
 				</Form.Text>
 			</Form.Group>
 			<Form.Group className="mb-3" controlId="formBasicCheckbox">
-				<Form.Check type="checkbox" checked={descriptionOn} onChange={() => setDescriptionOn(!descriptionOn)} label="Use description" />
+				<Form.Check type="checkbox" checked={descriptionOn} onChange={() => { setDescriptionOn(!descriptionOn); setTodoDescription('') }} label="Use description" />
 			</Form.Group>
 			{
 				descriptionOn &&
